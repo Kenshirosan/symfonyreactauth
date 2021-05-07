@@ -38,3 +38,11 @@ class HomeController extends AbstractController
 // edit -> afficher un formulaire pré-rempli avec les données d'une resource à mettre à jour | GET
 // update -> Sauvegarder les données de la resource a mettre a jour | PUT ou PATCH
 // destroy -> Effacer une resource | DELETE
+
+
+// Créer une entité Article :
+// id, title, body, user_id,
+// Associer Article.user_id avec User.id
+// Pour générer le CRUD, trouvez la bonne ligne de commande
+
+//
