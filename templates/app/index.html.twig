@@ -3,10 +3,9 @@
 {% block body %}
 
     {% for success in app.flashes('success') %}
-        <div><p>{{ success }}</p></div>
+        <div class="alert alert-success">
+            <p>{{ success }}</p>
+        </div>
     {% endfor %}
-
     <h2>Welcome, {{ app.user.email }}</h2>
-
-    <a href="/logout">Logout</a>
 {% endblock %}
