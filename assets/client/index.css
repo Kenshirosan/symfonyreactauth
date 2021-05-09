@@ -1,0 +1,148 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #282c34;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.app {
+  background-color: #282c34;
+  color: white;
+}
+
+.task-list {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+.app .sidebar {
+  margin-left: 1rem;
+  height: 100vh;
+}
+
+.link {
+  color: #61dafb;
+}
+
+ul {
+  list-style: none;
+}
+
+.lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tbody:before {
+  content: "@";
+  display: block;
+  line-height: 30px;
+  text-indent: -99999px;
+}
+
+td {
+  padding: 1rem;
+}
+
+table a {
+  text-decoration: none;
+}
+
+button {
+  background: red;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:not(table button),
+a:not(table a) {
+  padding: 0.5em;
+  background-color: azure;
+  font-size: calc(10px + 0.5vmin);
+}
+
+table tbody tr:nth-child(odd) {
+  background: #6b7382;
+}
+
+article {
+  margin-right: 1em;
+}
+
+article h3:first-child {
+  font-size: calc(16px + 1vmin);
+  background: #61dafb;
+  padding: 0.5em;
+}
+
+.task-container {
+  margin-top: 3em;
+  margin-right: 3em;
+}
+
+.task-container button,
+.task-container a {
+  margin: 1em 0 1em 0;
+}
+
+.task-container button:after {
+  clear: right;
+}
+
+form label {
+  text-align: left;
+}
+
+.task-container h2:first-child {
+  display: inline-block;
+  padding: 1em;
+  margin: 1em;
+}
+
+.task-container form input {
+  background-color: white;
+}
+
+.task-container form input[type="checkbox"] {
+  padding: 1em;
+  width: 20px;
+  height: 20px;
+  border-color: #282c34;
+}
+
+.task-container form label:not([for="complete"]),
+.task-container form input:not([type="checkbox"]),
+.task-container form textarea {
+  display: inline-block;
+  border: none;
+  width: 100%;
+}
+
+.task-container form label,
+.task-container form input {
+  padding: 1em;
+}
+
+.task-container form label[for="complete"],
+.task-container form input[type="checkbox"] {
+  margin: 1em;
+}
