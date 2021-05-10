@@ -24,6 +24,11 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    private $apiToken;
+
+    /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
@@ -53,6 +58,22 @@ class User implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * @param mixed $apiToken
+     */
+    public function setApiToken($apiToken): void
+    {
+        $this->apiToken = $apiToken;
     }
 
     public function getEmail(): ?string

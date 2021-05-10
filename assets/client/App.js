@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Home from "./components/Home"
+import Home from "./components/Home";
 
 const App = () => {
   return (
     <main className="app">
-        <Home />
+      <Home />
       <section className="task-list">
         <div>
-            <p>testing react with symfony</p>
-            <Link to={`/`}>Home</Link>
-            <a href="/">Home a href</a>
+          <p>testing react with symfony</p>
+          <Link to={`/`}>Home</Link>
+          <a href="/">Home a href</a>
         </div>
       </section>
     </main>
