@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,9 +21,21 @@ class ArticleController extends AbstractController
      */
     public function index(ArticleRepository $articleRepository): Response
     {
-        return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
-        ]);
+        $articles = $articleRepository->articlesWithUsers();
+//dd($articles);
+//
+//        $articles = $articleRepository->findAll();
+//        $article_a = [];
+//        foreach ($articles as $article) {
+//            $article_a[] = [
+//                'id' => $article->getId(),
+//                'title' => $article->getTitle(),
+//                'body' => $article->getBody(),
+//                'author' => $article->getAuthorEmail()
+//            ];
+//        }
+
+        return new JsonResponse($articles);
     }
 
     /**
@@ -83,7 +96,7 @@ class ArticleController extends AbstractController
      */
     public function delete(Request $request, Article $article): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($article);
             $entityManager->flush();

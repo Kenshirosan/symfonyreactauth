@@ -25,6 +25,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
+        return true;
+//        dd($request);
         // TODO: Implement start() method.
     }
 

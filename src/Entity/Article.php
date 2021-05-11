@@ -66,6 +66,11 @@ class Article
         return $this->user_id;
     }
 
+    public function getAuthorEmail(): ?string
+    {
+        return $this->getUserId()->getEmail();
+    }
+
     public function setUserId(?User $user_id): self
     {
         $this->user_id = $user_id;
