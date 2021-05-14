@@ -1,25 +1,26 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import FetchReq from '../../lib/FetchReq';
 
 const Home = () => {
-    const testApi = () => {
+    const [HTML, setHTML] = useState('');
+
+    const testApi = async () => {
         const params = {
             tasks: 'all',
-            else: 'tri',
+            done: 'true',
         };
 
-        // url, data = null, params = null, token = null, headers = null
-        const res = new FetchReq(
-            'http://localhost:8000/article',
+        const res = await new FetchReq(
+            'http://localhost:8000/article/new',
+            params,
             null,
-            null,
-            'token',
             'text/html'
         )
             .make()
             .get();
 
         console.log(res);
+        setHTML(res);
     };
 
     return (
@@ -27,6 +28,7 @@ const Home = () => {
             <p>Testing React in Symfony</p>
 
             <button onClick={testApi}>Test API</button>
+            {`${HTML}`}
         </div>
     );
 };

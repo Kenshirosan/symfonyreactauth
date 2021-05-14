@@ -23,7 +23,7 @@ class ArticleRepository extends ServiceEntityRepository
     /**
      * @return Article[] Returns an array of Article objects, with users
      */
-    public function articlesWithUsers()
+    public function articlesWithUsers(): ?array
     {
 
         return $this->createQueryBuilder('a')

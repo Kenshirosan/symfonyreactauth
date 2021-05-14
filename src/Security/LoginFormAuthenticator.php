@@ -2,8 +2,12 @@
 
 namespace App\Security;
 
+use App\Entity\Article;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +35,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    public $user;
+    public $userJson;
 
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -43,7 +49,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-//        dd($request);
         return self::LOGIN_ROUTE === $request->attributes->get('_route') && $request->isMethod('POST');
     }
 
@@ -64,9 +69,21 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
 
-        if(!$user) {
+
+        if (!$user) {
             throw new CustomUserMessageAuthenticationException('Nooooooooo!!!!!!');
         }
+
+        $id = $user->getId();
+
+        $this->user = $this->entityManager->createQueryBuilder()->select('u')
+            ->from(User::class, 'u')
+            ->addSelect('a')
+            ->where("u.id  = {$id}")
+            ->join('u.articles', 'a')
+            ->getQuery()
+            ->getArrayResult();
+
 
         return $user;
 
@@ -76,7 +93,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
 
-        if(!$this->csrfTokenManager->isTokenValid($token)) {
+        if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
 
@@ -86,7 +103,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
-        return new RedirectResponse($this->urlGenerator->generate('app_index'));
+        return new JsonResponse($this->user);
+//        $response = new Response(json_encode($this->user));
+//        $response->headers->set('Content-Type', 'application/json');
+//
+//        return $response;
+//
+//        return new RedirectResponse($this->urlGenerator->generate('app_index'));
     }
 
     public function getLoginUrl()

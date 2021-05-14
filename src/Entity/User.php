@@ -45,7 +45,7 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="user_id", fetch="EAGER")
      */
     private $articles;
 
@@ -149,7 +149,7 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+//         $this->password = null;
     }
 
     /**
