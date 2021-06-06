@@ -9,6 +9,7 @@
 /var/
 /vendor/
 .idea
+.env
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
