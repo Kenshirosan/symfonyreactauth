@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Query\Expr\Join;
+use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,9 +81,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             ->from(User::class, 'u')
             ->addSelect('a')
             ->where("u.id  = {$id}")
-            ->join('u.articles', 'a')
+            ->leftJoin('u.articles', 'a')
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()[0];
 
 
         return $user;
@@ -106,9 +107,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return new JsonResponse($this->user);
 //        $response = new Response(json_encode($this->user));
 //        $response->headers->set('Content-Type', 'application/json');
-//
+
 //        return $response;
-//
+
 //        return new RedirectResponse($this->urlGenerator->generate('app_index'));
     }
 

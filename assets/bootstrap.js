@@ -1,1 +1,3 @@
-import './client/index';
+import './styles/app.css';
+import './react-client/index';
+

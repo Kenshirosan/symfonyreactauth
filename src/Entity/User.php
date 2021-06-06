@@ -71,9 +71,11 @@ class User implements UserInterface
     /**
      * @param mixed $apiToken
      */
-    public function setApiToken($apiToken): void
+    public function setApiToken($apiToken): string
     {
         $this->apiToken = $apiToken;
+
+        return $this->apiToken;
     }
 
     public function getEmail(): ?string

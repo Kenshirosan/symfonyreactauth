@@ -11,7 +11,7 @@ const Home = () => {
         };
 
         const res = await new FetchReq(
-            'http://localhost:8000/article/new',
+            '/article/new',
             params,
             null,
             'text/html'
@@ -19,17 +19,15 @@ const Home = () => {
             .make()
             .get();
 
-        console.log(res);
         setHTML(res);
     };
 
     return (
-        <div>
-            <p>Testing React in Symfony</p>
-
-            <button onClick={testApi}>Test API</button>
-            {`${HTML}`}
-        </div>
+        <section className={`list`}>
+            <ul>
+                <li>list</li>
+            </ul>
+        </section>
     );
 };
 

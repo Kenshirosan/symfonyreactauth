@@ -7,7 +7,7 @@ class FetchReq {
      * @returns {FetchReq}
      */
     constructor(url, token = null, headers = null) {
-        this.url = url;
+        this.url = `http://localhost:8000${url}`;
         this.data = new FormData();
         this.token = token;
         this.headers = new Map([
@@ -33,7 +33,7 @@ class FetchReq {
         this.req = new Request(url);
 
         if (this.token) {
-            this.req.headers.set('Authorization', `Bearer token`);
+            this.req.headers.set('X-AUTH-TOKEN', `${this.token}`);
         }
 
         return this;
@@ -47,7 +47,7 @@ class FetchReq {
         try {
             const res = await fetch(this.req);
 
-            return this.response(res);
+            return await this.response(res);
         } catch (e) {
             console.error(e.message);
         }
@@ -68,16 +68,17 @@ class FetchReq {
                 body: this.data,
             });
 
-            return this.response(res);
+            return await this.response(res);
         } catch (e) {
             console.error(e.message);
         }
     }
 
-    errors(status) {
-        throw Error(`${status} Something went wrong with this request`);
-    }
-
+    /**
+     *
+     * @param res
+     * @returns {Promise<*>}
+     */
     async response(res) {
         if (res.ok) {
             if (res.headers.get('Content-Type') === 'application/json') {
@@ -86,7 +87,8 @@ class FetchReq {
 
             return await res.text();
         }
-        this.errors(res.status);
+
+        throw Error(`${res.status} Something went wrong with this request`);
     }
 }
 
