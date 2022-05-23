@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { UserContext } from './providers/user';
 import Home from './components/Home';
 import LoginForm from './components/auth/LoginForm';
@@ -27,13 +27,13 @@ const App = () => {
     return (
         <Fragment>
             <Header />
-            <main className="app container mt-5">
-                <Switch>
-                    <Route path={`/`} exact component={Home} />
-                    <Route path={'/login'} exact component={LoginForm} />
-                    <Route path={'/register'} exact component={RegisterForm} />
-                    <Route component={NotFound} />
-                </Switch>
+            <main className='app container mt-5'>
+                <Routes>
+                    <Route path={`/`} exact element={Home} />
+                    <Route path={'/login'} exact element={LoginForm} />
+                    <Route path={'/register'} exact element={RegisterForm} />
+                    <Route element={NotFound} />
+                </Routes>
             </main>
         </Fragment>
     );
