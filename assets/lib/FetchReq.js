@@ -61,7 +61,6 @@ class FetchReq {
         for (let key in data) {
             this.data.append(key, data[key]);
         }
-
         try {
             const res = await fetch(this.req, {
                 method: 'POST',
@@ -70,6 +69,7 @@ class FetchReq {
 
             return await this.response(res);
         } catch (e) {
+            console.error(e);
             console.error(e.message);
         }
     }

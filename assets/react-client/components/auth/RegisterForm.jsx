@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {useHistory} from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../providers/user';
 import FetchReq from '../../../lib/FetchReq';
 
@@ -32,17 +32,21 @@ const RegisterForm = () => {
             'registration_form[_token]': token,
         };
 
-        const apiToken = await new FetchReq('/register').make().post(data);
+        try {
+            const apiToken = await new FetchReq('/register').make().post(data);
 
-        if (apiToken) {
-            await dispatch({ type: 'LOAD_USER', payload: apiToken });
+            if (apiToken) {
+                await dispatch({ type: 'LOAD_USER', payload: apiToken });
 
-            history.push('/login');
+                history.push('/login');
 
-            return;
+                return;
+            }
+        } catch (error) {
+            console.log(error.message);
+            console.log(error);
+            alert('Something Went Wrong');
         }
-
-        alert('Something Went Wrong');
     };
 
     return (
