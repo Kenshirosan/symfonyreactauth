@@ -83,6 +83,7 @@ class FetchReq {
         try {
             if (res.ok) {
                 if (res.headers.get('Content-Type') === 'application/json') {
+                    console.log('toto est content');
                     return await res.json();
                 }
 

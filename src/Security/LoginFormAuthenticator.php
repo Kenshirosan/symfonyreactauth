@@ -23,10 +23,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
+// use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
+class LoginFormAuthenticator
 {
     use TargetPathTrait;
 
@@ -39,12 +39,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public $user;
     public $userJson;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordEncoder;
     }
 
 
@@ -87,7 +86,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
 
         return $user;
-
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -98,8 +96,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
-
+        return $token;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)

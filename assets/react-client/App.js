@@ -12,27 +12,35 @@ const App = () => {
     const [isLoggedIn, setIsLoggeIn] = useState(false);
     const [, dispatch] = useContext(UserContext);
 
-    useEffect(async () => {
+    const login = async () => {
         const idToken = localStorage.getItem('token');
         if (idToken) {
-            const user = await new FetchReq('/login', idToken).make().get();
+            const user = await new FetchReq('/api/login', idToken).make().get();
 
             if (user && user instanceof Object) {
                 setIsLoggeIn(true);
                 dispatch({ type: 'CHECK_AUTH', payload: user });
             }
         }
-    }, [isLoggedIn]);
+    };
+
+    useEffect(() => {
+        login().then(() => console.log('done'));
+    }, []);
 
     return (
         <Fragment>
             <Header />
             <main className='app container mt-5'>
                 <Routes>
-                    <Route path={`/`} exact element={Home} />
-                    <Route path={'/login'} exact element={LoginForm} />
-                    <Route path={'/register'} exact element={RegisterForm} />
-                    <Route element={NotFound} />
+                    <Route path={`/`} exact element={<Home />} />
+                    <Route path={'/login'} exact element={<LoginForm />} />
+                    <Route
+                        path={'/register'}
+                        exact
+                        element={<RegisterForm />}
+                    />
+                    <Route element={<NotFound />} />
                 </Routes>
             </main>
         </Fragment>

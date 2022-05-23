@@ -1,5 +1,5 @@
 security:
-    encoders:
+    password_hashers:
         App\Entity\User:
             # chiffre le mot passe
             algorithm: auto
@@ -16,14 +16,13 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
             lazy: true
             provider: app_user_provider
-            guard:
+            custom_authenticators:
                 entry_point: App\Security\LoginFormAuthenticator
-                authenticators:
-                    - App\Security\TokenAuthenticator
-                    - App\Security\LoginFormAuthenticator
+                authenticators: App\Security\TokenAuthenticator
+            json_login:
+                check_path: api_login
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -42,4 +41,4 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^(?!/(register|login)), roles: ROLE_USER }
+        - { path: ^(?!/(register|login)), roles: PUBLIC_ACCESS }

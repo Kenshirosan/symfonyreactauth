@@ -16,9 +16,12 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class TokenAuthenticator extends AbstractGuardAuthenticator
+
+class TokenAuthenticator
 {
     public const LOGIN_ROUTE = 'app_login';
     private $em;
@@ -57,17 +60,18 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return $ok;
     }
 
-    public function getCredentials(Request $request)
+    public function authenticate(Request $request) : Passport
     {
         if($request->headers->has('X-AUTH-TOKEN')) {
-            return $request->headers->get('X-AUTH-TOKEN');
+            return new SelfValidatingPassport(new UserBadge($request->headers->get('X-AUTH-TOKEN')));
         }
 
-        return [
-            "email" => $request->request->get('email'),
-            "password" => $request->request->get('password'),
-            "csrf_token" => $request->request->get('_csrf_token')
-        ];
+        // return [
+        //     "email" => $request->request->get('email'),
+        //     "password" => $request->request->get('password'),
+        //     "csrf_token" => $request->request->get('_csrf_token')
+        // ];
+
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
@@ -115,7 +119,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey) : ?Response
     {
         if($request->isXmlHttpRequest()) {
             $user = [

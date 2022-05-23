@@ -189,4 +189,9 @@ class User implements UserInterface
         return strval($this->getId());
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->getEmail();
+    }
+
 }

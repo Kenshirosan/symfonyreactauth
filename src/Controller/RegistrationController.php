@@ -14,13 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Doctrine\Persistence\ManagerRegistry;
 
 class RegistrationController extends AbstractController
 {
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator, TokenAuthenticator $tokenAuthenticator): Response
+    public function register(ManagerRegistry $doctrine, Request $request, LoginFormAuthenticator $authenticator, TokenAuthenticator $tokenAuthenticator): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -29,23 +30,19 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            $user->setPassword(password_hash($user . $form->get('plainPassword')->getData(), PASSWORD_DEFAULT));
 
-            $user->setApiToken($passwordEncoder->encodePassword(
-                $user,
-                $form->get('email')->getData() . $form->get('plainPassword')->getData()
+            $user->setApiToken(password_hash(
+                $user .
+                $form->get('email')->getData() . $form->get('plainPassword')->getData(),
+                PASSWORD_DEFAULT
             ));
 
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
+
             $entityManager->persist($user);
 
-            if($entityManager->flush() === null) {
-
+            if ($entityManager->flush() === null) {
                 return new JsonResponse($user->getApiToken());
             }
             // do anything else you need here, like send an email
