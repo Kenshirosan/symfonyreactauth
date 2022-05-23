@@ -80,15 +80,19 @@ class FetchReq {
      * @returns {Promise<*>}
      */
     async response(res) {
-        if (res.ok) {
-            if (res.headers.get('Content-Type') === 'application/json') {
-                return await res.json();
+        try {
+            if (res.ok) {
+                if (res.headers.get('Content-Type') === 'application/json') {
+                    return await res.json();
+                }
+
+                return await res.text();
             }
-
-            return await res.text();
+        } catch (e) {
+            throw Error(
+                `${res.status} ${e.message} Something went wrong with this request`
+            );
         }
-
-        throw Error(`${res.status} Something went wrong with this request`);
     }
 }
 

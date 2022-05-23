@@ -26,8 +26,9 @@ const LoginForm = () => {
     const submitForm = async e => {
         e.preventDefault();
 
-        let token = document.head.querySelector('meta[name="csrf-token"]')
-            .content;
+        let token = document.head.querySelector(
+            'meta[name="csrf-token"]'
+        ).content;
 
         const data = {
             email,
@@ -35,15 +36,19 @@ const LoginForm = () => {
             _csrf_token: token,
         };
 
-        const user = await new FetchReq('/login').make().post(data);
+        try {
+            const user = await new FetchReq('/login').make().post(data);
 
-        if (user instanceof Object) {
-            await dispatch({ type: 'LOAD_USER', payload: user });
+            if (user instanceof Object) {
+                await dispatch({ type: 'LOAD_USER', payload: user });
 
-            return history.push('/');
+                return history.push('/');
+            }
+        } catch (e) {
+            console.log(e.message);
+            console.log(e);
+            alert('No users found');
         }
-
-        alert('No users found');
     };
 
     return (

@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import FetchReq from '../../lib/FetchReq';
 
 const Home = () => {
@@ -10,17 +10,22 @@ const Home = () => {
             done: 'true',
         };
 
-        const res = await new FetchReq(
-            '/article/new',
-            params,
-            null,
-            'text/html'
-        )
+        let token = document.head.querySelector(
+            'meta[name="csrf-token"]'
+        ).content;
+
+        console.log(token);
+
+        const res = await new FetchReq('/article/new', token, 'text/html')
             .make()
             .get();
 
         setHTML(res);
     };
+
+    useEffect(() => {
+        testApi().then(() => console.log(HTML));
+    }, []);
 
     return (
         <section className={`list`}>
